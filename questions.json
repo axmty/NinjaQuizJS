@@ -1,0 +1,70 @@
+[
+  {
+    "question": {
+      "fr": "Comment indique-tu une direction à un ninja ?",
+      "en": "How do you give a ninja directions?"
+    },
+    "answers": [
+      {
+        "fr": "Montre-leur une carte",
+        "en": "Show them a map"
+      },
+      {
+        "fr": "Ne t'inquiète pas, un ninja te trouvera",
+        "en": "Don't worry, a ninja will find you"
+      }
+    ],
+    "correct": 1
+  },
+  {
+    "question": {
+      "fr": "Si un ninja a 3 pommes, qu'il en donne une à Mario et une à Yoshi, combien lui en reste-t-il ?",
+      "en": "If a ninja has 3 apples, then gives one to Mario & one to Yoshi, how many apples does the ninja have left?"
+    },
+    "answers": [
+      {
+        "fr": "1 pomme",
+        "en": "1 apple"
+      },
+      {
+        "fr": "3 pommes, et deux corps",
+        "en": "3 apples, and two corpses"
+      }
+    ],
+    "correct": 1
+  },
+  {
+    "question": {
+      "fr": "Quand sais-tu que tu as rencontré un ninja ?",
+      "en": "When do you know when you have met a ninja?"
+    },
+    "answers": [
+      {
+        "fr": "Tu reconnaîtras la tenue",
+        "en": "You'll recognize the outfit"
+      },
+      {
+        "fr": "Le faucheur vous le dira",
+        "en": "The grim reaper will tell you"
+      }
+    ],
+    "correct": 1
+  },
+  {
+    "question": {
+      "fr": "Quelle est la méthode de tableau préférée d'un ninja ?",
+      "en": "What is a ninja's favourite array method?"
+    },
+    "answers": [
+      {
+        "fr": "slice()",
+        "en": "slice()"
+      },
+      {
+        "fr": "forEach()",
+        "en": "forEach()"
+      }
+    ],
+    "correct": 1
+  }
+]
