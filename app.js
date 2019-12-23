@@ -3,7 +3,7 @@ const loadQuiz = () => new Promise((resolve) => {
   const xobj = new XMLHttpRequest();
 
   xobj.overrideMimeType('application/json');
-  xobj.open('GET', 'questions.json', true);
+  xobj.open('GET', 'quiz.json', true);
 
   xobj.onload = () => new Promise(() => {
     if (xobj.status === 200) {
