@@ -9,7 +9,14 @@ const loadQuiz = () => new Promise((resolve, reject) => {
 });
 
 (async () => {
-  const quiz = await loadQuiz();
+  let quiz = {};
+  
+  try {
+    quiz = await loadQuiz();
+  } catch (e) {
+    console.error(e);
+    return;
+  }
 
   const correctAnswers = ['B', 'B', 'B', 'B'];
   const form = document.querySelector('.quiz-form');
