@@ -1,18 +1,11 @@
-// TODO: handle errors
-const loadQuiz = () => new Promise((resolve) => {
-  const xobj = new XMLHttpRequest();
+const loadQuiz = () => new Promise((resolve, reject) => {
+  const xhr = new XMLHttpRequest();
 
-  xobj.overrideMimeType('application/json');
-  xobj.open('GET', 'quiz.json', true);
-
-  xobj.onload = () => new Promise(() => {
-    if (xobj.status === 200) {
-      resolve(JSON.parse(xobj.responseText));
-    }
-    return resolve({});
-  });
-
-  xobj.send();
+  xhr.overrideMimeType('application/json');
+  xhr.open('GET', 'quiz.json', true);
+  xhr.onload = () => { resolve(JSON.parse(xobj.responseText)); };
+  xhr.onerror = () => { reject(xhr.statusText); }
+  xhr.send();
 });
 
 (async () => {
