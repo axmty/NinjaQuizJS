@@ -3,19 +3,25 @@ const loadQuiz = () => new Promise((resolve, reject) => {
 
   xhr.overrideMimeType('application/json');
   xhr.open('GET', 'quiz.json', true);
-  xhr.onload = () => { resolve(JSON.parse(xobj.responseText)); };
-  xhr.onerror = () => { reject(xhr.statusText); }
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      resolve(JSON.parse(xhr.responseText));
+    } else if (xhr.readyState === XMLHttpRequest.DONE) {
+      reject(new Error(`Error while loading quiz.json: ${xhr.statusText}`));
+    }
+  };
+
   xhr.send();
 });
 
 (async () => {
   let quiz = {};
-  
+
   try {
     quiz = await loadQuiz();
   } catch (e) {
-    console.error(e);
-    return;
+    throw Error(`Error while loading quiz.json: ${e}`);
   }
 
   const correctAnswers = ['B', 'B', 'B', 'B'];
