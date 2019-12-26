@@ -15,8 +15,80 @@ const loadQuiz = () => new Promise((resolve, reject) => {
   xhr.send();
 });
 
+const populateForm = (form, quiz, lang) => {
+  const submitDiv = form.querySelector('div');
+
+  quiz.forEach((q, qi) => {
+    const questionNumber = qi + 1;
+
+    const questionDiv = document.createElement('div');
+    questionDiv.classList.add('my-5', 'question');
+
+    const questionP = document.createElement('p');
+    questionP.classList.add('lead', 'font-weight-normal');
+    questionP.textContent = `${questionNumber}. ${q.question[lang]}`;
+    questionDiv.append(questionP);
+
+    q.answers.forEach((a, ai) => {
+      const answerDiv = document.createElement('div');
+      answerDiv.classList.add('form-check', 'my-2', 'text-white-50');
+
+      const answerInput = document.createElement('input');
+      answerInput.type = 'radio';
+      answerInput.name = `q${questionNumber}`;
+      answerInput.value = `${ai}`;
+      answerInput.checked = ai === 0;
+      answerDiv.append(answerInput);
+
+      const answerLabel = document.createElement('label');
+      answerLabel.classList.add('form-check-label');
+      answerLabel.textContent = a[lang];
+      answerDiv.append(answerLabel);
+
+      questionDiv.append(answerDiv);
+    });
+
+    form.insertBefore(questionDiv, submitDiv);
+  });
+};
+
+const displayScore = (score) => {
+  const resultDiv = document.querySelector('.result');
+
+  resultDiv.classList.remove('d-none');
+
+  let scoreStep = 0;
+  const scoreSpan = resultDiv.querySelector('.score');
+  const scoreTimer = window.setInterval(() => {
+    scoreSpan.textContent = `${scoreStep}%`;
+    if (scoreStep >= score) {
+      window.clearInterval(scoreTimer);
+    }
+    scoreStep += 1;
+  }, 20);
+};
+
+const attachSubmitEvent = (form, quiz) => {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const questionDivs = form.querySelectorAll('.question');
+    const nbCorrectAnswers = Array.from(questionDivs)
+      .map((q) => {
+        const name = q.querySelector('input').getAttribute('name');
+        return form[name];
+      })
+      .filter((a, i) => Number(a.value) === quiz[i].correct)
+      .length;
+
+    const score = (nbCorrectAnswers * (100 / quiz.length)).toFixed();
+    displayScore(score);
+    window.scrollTo(0, 0);
+  });
+};
+
 (async () => {
-  let quiz = {};
+  let quiz = [];
 
   try {
     quiz = await loadQuiz();
@@ -24,32 +96,9 @@ const loadQuiz = () => new Promise((resolve, reject) => {
     throw Error(`Error while loading quiz.json: ${e}`);
   }
 
-  const correctAnswers = ['B', 'B', 'B', 'B'];
+  const lang = 'fr';
+
   const form = document.querySelector('.quiz-form');
-  const resultDiv = document.querySelector('.result');
-
-  const animateScore = (score) => {
-    let scoreStep = 0;
-    const scoreSpan = resultDiv.querySelector('.score');
-    const scoreTimer = window.setInterval(() => {
-      scoreSpan.textContent = `${scoreStep}%`;
-      if (scoreStep === score) {
-        window.clearInterval(scoreTimer);
-      }
-      scoreStep += 1;
-    }, 20);
-  };
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const userAnswers = [form.q1.value, form.q2.value, form.q3.value, form.q4.value];
-    const score = userAnswers.reduce(
-      (prev, curr, i) => prev + (curr === correctAnswers[i] ? 25 : 0), 0,
-    );
-
-    resultDiv.classList.remove('d-none');
-    window.scrollTo(0, 0);
-    animateScore(score);
-  });
+  populateForm(form, quiz, lang);
+  attachSubmitEvent(form, quiz);
 })();
