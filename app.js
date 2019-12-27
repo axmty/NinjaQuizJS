@@ -87,7 +87,7 @@ const attachSubmitEvent = (form, quiz) => {
   });
 };
 
-(async () => {
+(async function main() {
   let quiz = [];
 
   try {
@@ -101,4 +101,4 @@ const attachSubmitEvent = (form, quiz) => {
   const form = document.querySelector('.quiz-form');
   populateForm(form, quiz, lang);
   attachSubmitEvent(form, quiz);
-})();
+}());
