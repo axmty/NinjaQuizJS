@@ -1,19 +1,31 @@
-const loadQuiz = () => new Promise((resolve, reject) => {
+const loadJson = (fileName) => new Promise((resolve, reject) => {
   const xhr = new XMLHttpRequest();
 
   xhr.overrideMimeType('application/json');
-  xhr.open('GET', 'quiz.json', true);
+  xhr.open('GET', fileName, true);
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       resolve(JSON.parse(xhr.responseText));
     } else if (xhr.readyState === XMLHttpRequest.DONE) {
-      reject(new Error(`Error while loading quiz.json: ${xhr.statusText}`));
+      reject(new Error(`Error while loading ${fileName}: ${xhr.statusText}`));
     }
   };
 
   xhr.send();
 });
+
+const tryLoadJson = async (fileName) => {
+  try {
+    return await loadJson(fileName);
+  } catch (e) {
+    throw Error(`Error while loading ${fileName}: ${e}`);
+  }
+};
+
+const loadQuiz = async () => tryLoadJson('quiz.json');
+
+const loadLocalizedStrings = async () => tryLoadJson('localizedStrings.json');
 
 const populateForm = (form, quiz, lang) => {
   const submitDiv = form.querySelector('div');
@@ -88,15 +100,10 @@ const attachSubmitEvent = (form, quiz) => {
 };
 
 (async function main() {
-  let quiz = [];
+  const quiz = await loadQuiz();
+  const localizedStrings = await loadLocalizedStrings();
 
-  try {
-    quiz = await loadQuiz();
-  } catch (e) {
-    throw Error(`Error while loading quiz.json: ${e}`);
-  }
-
-  const lang = 'fr';
+  const lang = 'en';
 
   const form = document.querySelector('.quiz-form');
   populateForm(form, quiz, lang);

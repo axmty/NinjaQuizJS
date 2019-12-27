@@ -1,0 +1,14 @@
+{
+  "formHeading": {
+    "en": "On with the questions...",
+    "fr": "Voici les questions..."
+  },
+  "submitForm": {
+    "en": "Submit",
+    "fr": "Valider"
+  },
+  "result": {
+    "en": "You are {0}% ninja",
+    "fr": "Vous êtes un ninja à {0}%"
+  }
+}
