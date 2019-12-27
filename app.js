@@ -23,11 +23,16 @@ const tryLoadJson = async (fileName) => {
   }
 };
 
+const getFormElement = () => document.querySelector('.quiz-form');
+
 const loadQuiz = async () => tryLoadJson('quiz.json');
 
 const loadLocalizedStrings = async () => tryLoadJson('localizedStrings.json');
 
-const populateForm = (form, quiz, lang) => {
+const populateForm = (quiz, lang) => {
+  const form = getFormElement();
+  form.querySelectorAll('.question').forEach((q) => q.remove());
+
   const submitDiv = form.querySelector('div');
 
   quiz.forEach((q, qi) => {
@@ -80,7 +85,9 @@ const displayScore = (score) => {
   }, 20);
 };
 
-const attachSubmitEvent = (form, quiz) => {
+const bindSubmitEvent = (quiz) => {
+  const form = getFormElement();
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -99,13 +106,41 @@ const attachSubmitEvent = (form, quiz) => {
   });
 };
 
+const changeLanguage = (localizationDictionary, lang) => {
+  const resultDisplayP = document.querySelector('#result-display');
+  resultDisplayP.innerHTML = localizationDictionary.resultDisplay[lang];
+
+  const formHeadingH = document.querySelector('#form-heading');
+  formHeadingH.innerHTML = localizationDictionary.formHeading[lang];
+
+  const submitFormInput = document.querySelector('#submit-form');
+  submitFormInput.value = localizationDictionary.submitForm[lang];
+
+  document.querySelector('.result').classList.add('d-none');
+};
+
+const bindLanguageChangesEvent = (localizationDictionary, quiz) => {
+  const flags = document.querySelectorAll('.flags-container img');
+
+  flags.forEach((f) => {
+    const lang = f.getAttribute('data-lang');
+
+    f.addEventListener('click', () => {
+      changeLanguage(localizationDictionary, lang);
+      populateForm(quiz, lang);
+    });
+  });
+};
+
+
 (async function main() {
   const quiz = await loadQuiz();
-  const localizedStrings = await loadLocalizedStrings();
+  const localizationDictionary = await loadLocalizedStrings();
 
-  const lang = 'en';
+  const lang = 'fr';
+  changeLanguage(localizationDictionary, lang);
+  populateForm(quiz, lang);
 
-  const form = document.querySelector('.quiz-form');
-  populateForm(form, quiz, lang);
-  attachSubmitEvent(form, quiz);
+  bindLanguageChangesEvent(localizationDictionary, quiz);
+  bindSubmitEvent(quiz);
 }());

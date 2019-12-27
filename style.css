@@ -3,3 +3,7 @@
   float: right;
   right: 0;
 }
+
+.flags-container img:hover {
+  cursor: pointer;
+}

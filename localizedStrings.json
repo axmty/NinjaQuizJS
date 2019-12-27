@@ -7,8 +7,8 @@
     "en": "Submit",
     "fr": "Valider"
   },
-  "result": {
-    "en": "You are {0}% ninja",
-    "fr": "Vous êtes un ninja à {0}%"
+  "resultDisplay": {
+    "en": "You are <span class=\"score text-primary display-4 p-3\">0%</span> ninja",
+    "fr": "Vous êtes un ninja à <span class=\"score text-primary display-4 p-3\">0%</span>"
   }
 }
